@@ -31,3 +31,7 @@
     @apply text-sm;
   }
 }
+
+* {
+  font-family: dm sans;
+}

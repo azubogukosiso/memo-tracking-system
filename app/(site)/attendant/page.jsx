@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from "next/navigation";
 import Nav from "@/app/(components)/Nav";
+import Header from "@/app/(components)/HeaderComponent";
 import MemoCard from "@/app/(components)/MemoCard";
 
 const getMemos = async (session) => {
@@ -44,21 +45,26 @@ const page = async () => {
     }
 
     const { message } = await getMemos(session);
-
     return (
-        <>
-            <Nav />
-            <div className='mt-5 w-10/12 mx-auto'>
-                {
-                    message.length > 0 ? message.map(memo => (
-                        <MemoCard key={memo._id} memo_key={memo._id} original={memo.originalMemo_id} sender={memo.sender} receipient={memo.receipient} memoTN={memo.memoTN} description={memo.description} title={memo.title} status={memo.status} dateSent={formatTimestamp(memo.dateSent)} dateReceived={formatTimestamp(memo.dateReceived)} session={session} />
-                    )) : (
-                        <h3>No memos at the moment.</h3>
-                    )
-                }
+        <div className="flex w-full justify-between">
+            <div className="w-0 lg:w-[20%]">
+                <Nav />
             </div>
-            {JSON.stringify(session.user.office)}
-        </>
+            <div className="w-full lg:w-[78%]">
+                <Header />
+                <div className="border border-black"></div>
+                <div className='w-full p-4'>
+                    <h2 className='mb-5'>All Memos</h2>
+                    {
+                        message.length > 0 ? message.map(memo => (
+                            <MemoCard key={memo.id} memo_key={memo.id} sender={memo.sender} receipient={memo.receipient} memoTrackingNum={memo.memoTrackingNum} type={memo.type} title={memo.title} dateConfirmed={formatTimestamp(memo.dateConfirmed)} dateSent={formatTimestamp(memo.dateSent)} session={session} />
+                        )) : (
+                            <h3>No memos at the moment.</h3>
+                        )
+                    }
+                </div>
+            </div>
+        </div>
     )
 }
 

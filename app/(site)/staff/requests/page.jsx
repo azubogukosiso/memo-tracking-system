@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from "next/navigation";
 import Nav from "@/app/(components)/Nav";
+import Header from "@/app/(components)/HeaderComponent";
 import RequestCard from "@/app/(components)/RequestCard";
 
 const getRequests = async (session) => {
@@ -46,19 +47,25 @@ const page = async () => {
     const { message } = await getRequests(session);
 
     return (
-        <>
-            <Nav />
-            <div className='mt-5 w-10/12 mx-auto'>
-                {
-                    message.length > 0 ? message.map(request => (
-                        <RequestCard key={request._id} request_key={request._id} sender={request.sender} memoTN={request.memoTN} description={request.description} title={request.title} status={request.status} dateSent={formatTimestamp(request.dateSent)} session={session} />
-                    )) : (
-                        <h3>No requests made.</h3>
-                    )
-                }
+        <div className="flex w-full justify-between">
+            <div className="w-0 lg:w-[20%]">
+                <Nav />
             </div>
-            <pre>{JSON.stringify(session)}</pre>
-        </>
+            <div className="w-full lg:w-[78%]">
+                <Header />
+                <div className="border border-black"></div>
+                <div className='w-full p-4'>
+                    <h2 className='mb-5'>All Requests</h2>
+                    {
+                        message.length > 0 ? message.map(request => (
+                            <RequestCard key={request._id} request_key={request._id} sender={request.sender} senderEmail={request.senderEmail} memoTrackingNum={request.memoTrackingNum} title={request.title} description={request.description} status={request.status} dateSent={formatTimestamp(request.dateSent)} session={session} />
+                        )) : (
+                            <h3>No requests made.</h3>
+                        )
+                    }
+                </div>
+            </div>
+        </div>
     )
 }
 

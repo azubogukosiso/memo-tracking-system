@@ -1,26 +1,19 @@
 import mongoose, { Schema } from "mongoose";
 
-mongoose.connect(process.env.MONGODB_URI_LOCAL);
+mongoose.connect(process.env.MONGODB_URI);
 mongoose.Promise = global.Promise;
 
 const memoSchema = new Schema(
     {
         title: String,
         description: String,
-        sender: String,
-        receipient: String,
-        dateSent: {
-            type: Date,
-            default: Date.now
-        },
-        dateConfirmed: {
-            type: Date,
+        image: {
+            type: Array,
             default: null
         },
-        memoTN: String,
-        status: String,
+        memoTrackingNum: String,
         resent: {
-            type: String,
+            type: Boolean,
             default: false
         },
     },

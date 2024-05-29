@@ -5,7 +5,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import ClientComponentBtn from '@/app/(components)/ClientComponentBtn';
 
 const fetchMemoDetails = async (id) => {
     console.log("this is the: ", id);
@@ -59,11 +58,11 @@ const page = async ({ params }) => {
                     <div>
                         <p className='text-base mb-3'><span className='font-bold'>Memo Title:</span> {message.title}</p>
                         <p className='text-base mb-3'><span className='font-bold'>Memo Description:</span> {message.description}</p>
-                        {
-                            session.user.office === message.receipient ?
-                                <p className='text-base mb-3'><span className='font-bold'>Sender:</span> {message.sender}</p>
-                                : <p className='text-base mb-3'><span className='font-bold'>Receipient:</span> {message.receipient}</p>
-                        }
+
+                        <p className='text-base mb-3'><span className='font-bold'>Sender:</span> {session.user.office === message.sender ? 'this office' : message.sender}</p>
+
+                        <p className='text-base mb-3'><span className='font-bold'>Receipient:</span> {session.user.office === message.receipient ? 'this office' : message.receipient}</p>
+
                         <p className='text-base mb-3'><span className='font-bold'>Memo Tracking Number:</span> {message.memoTrackingNum}</p>
 
                         {
@@ -84,10 +83,16 @@ const page = async ({ params }) => {
                                         </Link>
                                     ))
                                     :
-                                    ''
+                                    message.image ?
+                                        message.image.map((image, index) => (
+                                            <Link key={index} href={image} target="_blank" className="relative inline-block mt-4 rounded h-[100px] border-black border overflow-hidden">
+                                                <Image alt="" src={image} style={{ objectFit: "cover" }} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" priority={true} />
+                                            </Link>
+                                        ))
+                                        :
+                                        ''
                             }
                         </div>
-                        <ClientComponentBtn message={message} session={session} />
                     </div>
                 </div>
 

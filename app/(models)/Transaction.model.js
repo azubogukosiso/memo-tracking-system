@@ -3,14 +3,8 @@ import mongoose, { Schema } from "mongoose";
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.Promise = global.Promise;
 
-const ResentMemoSchema = new Schema(
+const TransactionSchema = new Schema(
     {
-        originalMemo_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Memo'
-        },
-        title: String,
-        description: String,
         sender: String,
         receipient: String,
         dateSent: {
@@ -21,13 +15,16 @@ const ResentMemoSchema = new Schema(
             type: Date,
             default: null
         },
-        status: String,
-        memoTN: String,
+        memoTrackingNum: String,
+        type: {
+            type: String,
+            default: "original"
+        },
     },
     {
         timestamps: true,
     }
 );
 
-const ResentMemo = mongoose.models.Resent_Memo || mongoose.model("Resent_Memo", ResentMemoSchema);
-export default ResentMemo;
+const Transaction = mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);
+export default Transaction;

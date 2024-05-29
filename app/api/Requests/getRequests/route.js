@@ -8,7 +8,18 @@ export async function POST(req) {
 
         if (body.user.role !== 'admin') {
             const allRequests = await Request.find({ sender: body.user.office });
-            console.log(allRequests);
+
+            // SORT REQUESTS FROM LATEST TO OLDEST
+            allRequests.sort(function (a, b) {
+                // CONVERT DATESENT STRINGS TO DATE OBJECTS
+                const dateA = new Date(a.dateSent);
+                const dateB = new Date(b.dateSent);
+
+                // COMPARE THE DATES
+                if (dateA < dateB) return 1;
+                if (dateA > dateB) return -1;
+                return 0;
+            });
 
             // if allMemos...
             return NextResponse.json(
@@ -17,7 +28,18 @@ export async function POST(req) {
             );
         } else {
             const allRequests = await Request.find();
-            console.log(allRequests);
+
+            // SORT REQUESTS FROM LATEST TO OLDEST
+            allRequests.sort(function (a, b) {
+                // CONVERT DATESENT STRINGS TO DATE OBJECTS
+                const dateA = new Date(a.dateSent);
+                const dateB = new Date(b.dateSent);
+
+                // COMPARE THE DATES
+                if (dateA < dateB) return 1;
+                if (dateA > dateB) return -1;
+                return 0;
+            });
 
             // if allMemos...
             return NextResponse.json(
@@ -25,7 +47,6 @@ export async function POST(req) {
                 { status: 200 }
             );
         }
-        // const adminMemos = await Memo.find();        
     } catch (err) {
         console.log("Error here: ", err);
         return NextResponse.json(

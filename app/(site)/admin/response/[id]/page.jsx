@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from "next/navigation";
 import Nav from "@/app/(components)/Nav";
+import Header from "@/app/(components)/HeaderComponent";
 import MemoResponseForm from "@/app/(components)/MemoResponseForm";
 
 
@@ -13,11 +14,15 @@ const page = async () => {
     }
 
     return (
-        <>
-            <Nav />
-            <MemoResponseForm />
-            {JSON.stringify(session.user.role)}
-        </>
+        <div className="flex w-full justify-between">
+            <div className="w-0 lg:w-[20%]">
+                <Nav />
+            </div>
+            <div className="w-full lg:w-[78%]">
+                <Header />
+                <MemoResponseForm />
+            </div>
+        </div>
     )
 }
 

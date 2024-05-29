@@ -15,9 +15,6 @@ export const authOptions = {
                 },
             },
             async authorize(credentials) {
-                // const user = { id: 1, name: "Kosiso", email: "azuboguko@gmail.com" };
-                // console.log("credentials here: ", credentials);
-
                 if (!credentials.email || !credentials.password) {
                     throw new Error("Please fill all the fields!");
                 }
@@ -32,16 +29,13 @@ export const authOptions = {
                     throw new Error("Incorrect password");
                 }
 
-                // console.log("user here: ", user);
                 return user;
             },
         }),
     ],
     callbacks: {
         async jwt({ token, user, session }) {
-            // console.log("\n\njwt callback", { token, user, session });
-
-            // PASS USER'S PASSWORD TO TOKEN
+            // PASS USER'S ROLE AND OFFICE TO TOKEN OBJECT
             if (user) {
                 return {
                     ...token,
@@ -57,7 +51,7 @@ export const authOptions = {
         async session({ session, token, user }) {
             // console.log("\n\nsession callback", { session, token, user });
 
-            // PASS USER'S PASSWORD TO TOKEN AND THEN TO SESSION
+            // PASS USER'S ROLE AND OFFICE TO TOKEN AND THEN TO SESSION
             return {
                 ...session,
                 user: {

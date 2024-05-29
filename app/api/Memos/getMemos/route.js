@@ -1,47 +1,97 @@
 import Memo from "@/app/(models)/Memo.model";
-import ResentMemo from "@/app/(models)/ResentMemo.model";
+import Transaction from "@/app/(models)/Transaction.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try {
         const body = await req.json();
-        console.log("siuuuu: ", body);
 
         if (body.user.role !== 'admin') {
-            const allMemos = await Memo.find({
+            const Memos = [];
+
+            const matchedTransactions = await Transaction.find({
                 $or: [
                     { sender: body.user.office },
                     { receipient: body.user.office }
                 ]
             });
 
-            const allResentMemos = await ResentMemo.find({
-                $or: [
-                    { sender: body.user.office },
-                    { receipient: body.user.office }
-                ]
+            await Promise.all(matchedTransactions.map(async (transaction) => {
+                const matchedMemo = await Memo.find({ memoTrackingNum: transaction.memoTrackingNum })
+
+                const memoDetails = {
+                    id: transaction._id,
+                    title: matchedMemo[0].title,
+                    sender: transaction.sender,
+                    receipient: transaction.receipient,
+                    dateSent: transaction.dateSent,
+                    dateConfirmed: transaction.dateConfirmed,
+                    memoTrackingNum: matchedMemo[0].memoTrackingNum,
+                    type: transaction.type
+                }
+
+                Memos.push(memoDetails);
+            }))
+
+            // SORT MEMOS FROM LATEST TO OLDEST
+            Memos.sort(function (a, b) {
+                // CONVERT DATESENT STRINGS TO DATE OBJECTS
+                const dateA = new Date(a.dateSent);
+                const dateB = new Date(b.dateSent);
+
+                // COMPARE THE DATES
+                if (dateA < dateB) return 1;
+                if (dateA > dateB) return -1;
+                return 0;
             });
 
-            const combinedMemos = allMemos.concat(allResentMemos);
+            console.log("this is it, right here: ", Memos);
 
-            console.log("first:", combinedMemos);
-
-            // if allMemos...
             return NextResponse.json(
-                { message: combinedMemos },
+                { message: Memos },
                 { status: 200 }
             );
         } else {
-            const allMemos = await Memo.find();
+            const Memos = [];
 
-            // if allMemos...
+            const matchedTransactions = await Transaction.find();
+
+            await Promise.all(matchedTransactions.map(async (transaction) => {
+                const matchedMemo = await Memo.find({ memoTrackingNum: transaction.memoTrackingNum })
+
+                const memoDetails = {
+                    id: transaction._id,
+                    title: matchedMemo[0].title,
+                    sender: transaction.sender,
+                    receipient: transaction.receipient,
+                    dateSent: transaction.dateSent,
+                    dateConfirmed: transaction.dateConfirmed,
+                    memoTrackingNum: matchedMemo[0].memoTrackingNum,
+                    type: transaction.type
+                }
+
+                Memos.push(memoDetails);
+            }))
+
+            // SORT MEMOS FROM LATEST TO OLDEST
+            Memos.sort(function (a, b) {
+                // CONVERT DATESENT STRINGS TO DATE OBJECTS
+                const dateA = new Date(a.dateSent);
+                const dateB = new Date(b.dateSent);
+
+                // COMPARE THE DATES
+                if (dateA < dateB) return 1;
+                if (dateA > dateB) return -1;
+                return 0;
+            });
+
             return NextResponse.json(
-                { message: allMemos },
+                { message: Memos },
                 { status: 200 }
             );
         }
     } catch (err) {
-        console.log("Error here: ", err);
+
         return NextResponse.json(
             { message: "Error", err },
             { status: 400 }
@@ -51,116 +101,48 @@ export async function POST(req) {
 
 export async function GET(req) {
     try {
-        const type = req.nextUrl.searchParams.get("id");
+        const id = req.nextUrl.searchParams.get("id"); // EXTRACT ID PARAMETER
 
-        // Logic to use the "type" parameter for fetching data
-        let matchedMemo = await Memo.findById(type);
+        console.log("this is the way: ", id);
 
-        if (matchedMemo) {
-            if (matchedMemo.resent === "true") {
-                let memoTransferHistory = await ResentMemo.find({ originalMemo_id: matchedMemo._id }, { sender: 1, receipient: 1, dateSent: 1, dateConfirmed: 1, _id: 1 });
+        // LOGIC TO USE THE "ID" PARAMETER FOR FETCHING DATA
+        const matchedTransaction = await Transaction.findById(id);
 
-                let initialMemoHistory = {
-                    _id: matchedMemo._id,
-                    sender: matchedMemo.sender,
-                    receipient: matchedMemo.receipient,
-                    dateSent: matchedMemo.dateSent,
-                    dateConfirmed: matchedMemo.dateConfirmed
-                }
+        if (matchedTransaction) {
+            const matchedMemo = await Memo.find({ memoTrackingNum: matchedTransaction.memoTrackingNum })
 
-                memoTransferHistory.push(initialMemoHistory);
-                console.log("first sect: ", memoTransferHistory);
+            const memoTransferHistory = await Transaction.find({ memoTrackingNum: matchedTransaction.memoTrackingNum })
 
-                memoTransferHistory.sort(function (a, b) {
-                    // Convert dateSent strings to Date objects
-                    const dateA = new Date(a.dateSent);
-                    const dateB = new Date(b.dateSent);
+            // SORT TRANSACTIONS FROM LATEST TO OLDEST
+            memoTransferHistory.sort(function (a, b) {
+                // CONVERT DATESENT STRINGS TO DATE OBJECTS
+                const dateA = new Date(a.dateSent);
+                const dateB = new Date(b.dateSent);
 
-                    // Compare the dates
-                    if (dateA < dateB) return -1;
-                    if (dateA > dateB) return 1;
-                    return 0;
-                });
+                // COMPARE THE DATES
+                if (dateA < dateB) return -1;
+                if (dateA > dateB) return 1;
+                return 0;
+            });
 
-                const updatedMatchedMemo = {
-                    ...matchedMemo,
-                    memoTransferHistory
-                }
-
-                console.log("here it is, first", updatedMatchedMemo);
-
-                return NextResponse.json(
-                    { message: updatedMatchedMemo },
-                    { status: 200 }
-                );
-            } else {
-                let memoTransferHistory = {
-                    _id: matchedMemo._id,
-                    sender: matchedMemo.sender,
-                    receipient: matchedMemo.receipient,
-                    dateSent: matchedMemo.dateSent,
-                    dateConfirmed: matchedMemo.dateConfirmed
-                }
-
-                console.log("second sect: ", memoTransferHistory);
-
-                const updatedMatchedMemo = {
-                    ...matchedMemo,
-                    memoTransferHistory
-                }
-
-                console.log("here it is, second", updatedMatchedMemo);
-
-                return NextResponse.json(
-                    { message: updatedMatchedMemo },
-                    { status: 200 }
-                );
+            const memoDetails = {
+                id: id,
+                sender: matchedTransaction.sender,
+                receipient: matchedTransaction.receipient,
+                dateSent: matchedTransaction.dateSent,
+                dateConfirmed: matchedTransaction.dateConfirmed,
+                memoTrackingNum: matchedTransaction.memoTrackingNum,
+                title: matchedMemo[0].title,
+                description: matchedMemo[0].description,
+                image: matchedMemo[0].image,
+                type: matchedTransaction.type,
+                memoTransferHistory,
             }
-        } else {
-            let oneResentDoc = await ResentMemo.findOne({ _id: type });
-            if (oneResentDoc) {
-                let mainDoc = await Memo.findById(oneResentDoc.originalMemo_id);
 
-                if (mainDoc) {
-                    let memoTransferHistory = await ResentMemo.find({ originalMemo_id: mainDoc._id }, { sender: 1, receipient: 1, dateSent: 1, dateConfirmed: 1, _id: 1 });
-
-                    let initialMemoHistory = {
-                        _id: mainDoc._id,
-                        sender: mainDoc.sender,
-                        receipient: mainDoc.receipient,
-                        dateSent: mainDoc.dateSent,
-                        dateConfirmed: mainDoc.dateConfirmed
-                    }
-
-                    memoTransferHistory.push(initialMemoHistory);
-                    console.log("third sect: ", memoTransferHistory);
-
-                    memoTransferHistory.sort(function (a, b) {
-                        // Convert dateSent strings to Date objects
-                        const dateA = new Date(a.dateSent);
-                        const dateB = new Date(b.dateSent);
-
-                        console.log("yooooo: ", dateA, dateB);
-
-                        // Compare the dates
-                        if (dateA < dateB) return -1;
-                        if (dateA > dateB) return 1;
-                        return 0;
-                    });
-
-                    const updatedMatchedMemo = {
-                        ...oneResentDoc,
-                        memoTransferHistory
-                    }
-
-                    console.log("here it is, third", updatedMatchedMemo);
-
-                    return NextResponse.json(
-                        { message: updatedMatchedMemo },
-                        { status: 200 }
-                    );
-                }
-            }
+            return NextResponse.json(
+                { message: memoDetails },
+                { status: 200 }
+            );
         }
     } catch (err) {
         return NextResponse.json(
