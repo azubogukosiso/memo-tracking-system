@@ -16,7 +16,7 @@ const Page = () => {
             toast.error(res.error, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setLoadingAction(false);
         } else {
-            location.assign('http://localhost:3000/admin');
+            location.assign(`${process.env.LIVE_URL}admin`);
         }
     }
 
