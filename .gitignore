@@ -36,4 +36,5 @@ next-env.d.ts
 
 #others
 /app/dept
+/app/(site)/login/[slug]
 /public/images
