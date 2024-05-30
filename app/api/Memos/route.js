@@ -51,28 +51,8 @@ export async function POST(req) {
 
             await Promise.all(formDataEntryValues.map(async (image) => {
                 if (typeof image === "object") {
-                    // EXTRACT EXTENSION
-                    const ext = path.extname(image.name).toLowerCase();
-
-                    // GENERATE UNIQUE FILENAME AND APPEND EXTENSION
-                    const filename = `${Date.now()}${ext}`;
-
-                    // CONSTRUCT FILE PATH WITH IMAGES FOLDER CREATION
-                    const filePath = path.join(process.cwd(), 'public', 'images', filename);
-
-                    try {
-                        // CHECK IF THE DIRECTORY EXISTS; CREATE IT IF NOT
-                        await fs.access(path.dirname(filePath), fs.constants.F_OK | fs.constants.W_OK); // CHECK ACCESS WITH WRITE PERMISSION
-                    } catch (error) {
-                        if (error.code === 'ENOENT') { // ERROR IF DIRECTORY DOESN'T EXIST
-                            await fs.mkdir(path.dirname(filePath), { recursive: true }); // CREATE DIRECTORY RECURSIVELY
-                        } else {
-                            throw error; // RE-THROW OTHER ERRORS
-                        }
-                    }
-
                     let url;
-                    // MOVE THE UPLOADED FILE TO THE PUBLIC FOLDER
+                    // UPLOAD FILE TO CLOUDINARY
                     try {
                         const bytes = await image.arrayBuffer()
                         const buffer = Buffer.from(bytes);
