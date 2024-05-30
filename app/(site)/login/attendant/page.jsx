@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import Header from "@/app/(components)/HeaderComponent";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+    const router = useRouter();
+
     const [data, setData] = useState({ email: '', password: '', role: 'attendant' });
     const [loadingAction, setLoadingAction] = useState(false);
 
@@ -16,8 +19,7 @@ const Page = () => {
             toast.error(res.error, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setLoadingAction(false);
         } else {
-            console.log("this is location: ", location);
-            location.assign(`${process.env.LIVE_URL}attendant`);
+            window.location.href = "/attendant";
         }
     }
 

@@ -7,7 +7,7 @@ import Header from "@/app/(components)/HeaderComponent";
 const MemoRequestForm = async ({ params }) => {
     const getResponse = async (request_id) => {
         console.log(request_id);
-        const res = await fetch(`${process.env.LIVE_URL}api/Response/getResponse`, {
+        const res = await fetch(`${process.env.URL_ORIGIN}/api/Response/getResponse`, {
             method: "POST",
             body: JSON.stringify(request_id),
             "content-type": "application/json"

@@ -18,7 +18,7 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
                     {
                         session.user.role !== 'admin' &&
                         <span className="flex my-2 md:my-0">
-                            {type !== 'original' ? <span className='flex items-center p-1 rounded bg-yellow-300 border border-black mr-2'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" className='mr-1'><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 15V17H13V15H11ZM11 7V13H13V7H11Z"></path></svg>{type}</span> : ''}
+                            {type !== 'original' ? <span className='flex items-center p-1 rounded bg-yellow-300 border border-black mr-2'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" className='mr-1'><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 15V17H13V15H11ZM11 7V13H13V7H11Z"></path></svg>{type === "forward" ? "fowarded" : "resent"}</span> : ''}
 
                             {dateConfirmed ?
                                 <span className="flex items-center justify-between p-1 border border-black bg-green-400 rounded mr-2">

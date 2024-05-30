@@ -7,7 +7,7 @@ import MemoCard from "@/app/(components)/MemoCard";
 
 const getMemos = async (session) => {
     try {
-        const res = await fetch(`${process.env.LIVE_URL}api/Memos/getMemos`, {
+        const res = await fetch(`${process.env.URL_ORIGIN}/api/Memos/getMemos`, {
             method: "POST",
             body: JSON.stringify(session),
             "content-type": "application/json"

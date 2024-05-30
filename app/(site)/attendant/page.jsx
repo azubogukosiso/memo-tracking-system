@@ -7,7 +7,7 @@ import MemoCard from "@/app/(components)/MemoCard";
 
 const getMemos = async (session) => {
     try {
-        const res = await fetch(`${process.env.LIVE_URL}api/Memos/getMemos`, {
+        const res = await fetch(`${process.env.URL_ORIGIN}/api/Memos/getMemos`, {
             method: "POST",
             body: JSON.stringify(session),
             "content-type": "application/json"
@@ -45,6 +45,7 @@ const page = async () => {
     }
 
     const { message } = await getMemos(session);
+
     return (
         <div className="flex w-full justify-between">
             <div className="w-0 lg:w-[20%]">
