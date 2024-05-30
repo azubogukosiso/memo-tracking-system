@@ -3,39 +3,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from "next/navigation";
 import Nav from "@/app/(components)/Nav";
 import Header from "@/app/(components)/HeaderComponent";
-import RequestCard from "@/app/(components)/RequestCard";
-
-const getRequests = async (session) => {
-    try {
-        const res = await fetch(`${process.env.URL_ORIGIN}/api/Requests/getRequests`, {
-            method: "POST",
-            body: JSON.stringify(session),
-            "content-type": "application/json"
-        });
-        return res.json();
-    } catch (error) {
-        console.log("Failed to get memos", error);
-    }
-}
-
-const formatTimestamp = (timestamp) => {
-    console.log("timestamp here: ", timestamp);
-
-    if (timestamp === null) {
-        return timestamp;
-    } else {
-        const options = {
-            year: "numeric",
-            month: "long",
-            day: "2-digit",
-        }
-
-        const date = new Date(timestamp);
-        const formattedDate = date.toLocaleString("en-US", options);
-
-        return formattedDate;
-    }
-}
+import RequestList from "@/app/(components)/RequestListComponent";
 
 const page = async () => {
     const session = await getServerSession(authOptions);
@@ -43,8 +11,6 @@ const page = async () => {
     if (!session) {
         redirect("/login/staff");
     }
-
-    const { message } = await getRequests(session);
 
     return (
         <div className="flex w-full justify-between">
@@ -56,13 +22,7 @@ const page = async () => {
                 <div className="border border-black"></div>
                 <div className='w-full p-4'>
                     <h2 className='mb-5'>All Requests</h2>
-                    {
-                        message.length > 0 ? message.map(request => (
-                            <RequestCard key={request._id} request_key={request._id} sender={request.sender} senderEmail={request.senderEmail} memoTrackingNum={request.memoTrackingNum} title={request.title} description={request.description} status={request.status} dateSent={formatTimestamp(request.dateSent)} session={session} />
-                        )) : (
-                            <h3>No requests made.</h3>
-                        )
-                    }
+                    <RequestList session={session} />
                 </div>
             </div>
         </div>
