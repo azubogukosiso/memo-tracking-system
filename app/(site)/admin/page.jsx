@@ -3,37 +3,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from "next/navigation";
 import Nav from "@/app/(components)/Nav";
 import Header from "@/app/(components)/HeaderComponent";
-import MemoCard from "@/app/(components)/MemoCard";
-
-const getMemos = async (session) => {
-    try {
-        const res = await fetch(`${process.env.URL_ORIGIN}/api/Memos/getMemos`, {
-            method: "POST",
-            body: JSON.stringify(session),
-            "content-type": "application/json"
-        });
-        return res.json();
-    } catch (error) {
-        console.log("Failed to get memos", error);
-    }
-}
-
-const formatTimestamp = (timestamp) => {
-    if (timestamp === null) {
-        return timestamp;
-    } else {
-        const options = {
-            year: "numeric",
-            month: "long",
-            day: "2-digit",
-        }
-
-        const date = new Date(timestamp);
-        const formattedDate = date.toLocaleString("en-US", options);
-
-        return formattedDate;
-    }
-}
+import MemoList from "@/app/(components)/MemoListComponent";
 
 const page = async () => {
     const session = await getServerSession(authOptions);
@@ -41,10 +11,6 @@ const page = async () => {
     if (!session) {
         redirect("/login/admin");
     }
-
-    const { message } = await getMemos(session);
-
-    console.log(message);
 
     return (
         <div className="flex w-full justify-between">
@@ -56,13 +22,7 @@ const page = async () => {
                 <div className="border border-black"></div>
                 <div className='w-full p-4'>
                     <h2 className='mb-5'>All Memos</h2>
-                    {
-                        message.length > 0 ? message.map(memo => (
-                            <MemoCard key={memo.id} memo_key={memo.id} sender={memo.sender} receipient={memo.receipient} memoTrackingNum={memo.memoTrackingNum} description={memo.description} title={memo.title} status={memo.status} dateSent={formatTimestamp(memo.dateSent)} dateConfirmed={formatTimestamp(memo.dateConfirmed)} session={session} />
-                        )) : (
-                            <h3>No memos at the moment.</h3>
-                        )
-                    }
+                    <MemoList session={session} />
                 </div>
             </div>
         </div>
