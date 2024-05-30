@@ -1,8 +1,14 @@
 import { v2 as cloudinary } from 'cloudinary';
-import streamifier from 'streamifier';
 
-export const cloudinaryUpload = (bufferImage) => {
-    console.log("this is the bufferImage: ", bufferImage);
+export const cloudinaryUpload = async (image) => {
+    console.log("this is the image: ", image);
+
+    let fileBuffer = await image.arrayBuffer();
+    let mime = image.type;
+    let encoding = 'base64';
+    let base64Data = Buffer.from(fileBuffer).toString('base64');
+    let fileUri = 'data:' + mime + ';' + encoding + ',' + base64Data;
+
     cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
         api_key: process.env.CLOUDINARY_API_KEY,
@@ -10,8 +16,7 @@ export const cloudinaryUpload = (bufferImage) => {
     });
 
     return new Promise((resolve, reject) => {
-
-        let cld_upload_stream = cloudinary.uploader.upload_stream(
+        cloudinary.uploader.upload(fileUri,
             {
                 overwrite: true,
                 invalidate: true,
@@ -22,12 +27,10 @@ export const cloudinaryUpload = (bufferImage) => {
                     console.log("this is the result: ", result);
                     resolve(result.secure_url);
                 } else {
+                    console.log("this is the error: ", error);
                     reject(error);
                 }
             }
         );
-
-        streamifier.createReadStream(bufferImage).pipe(cld_upload_stream);
     });
-
 };

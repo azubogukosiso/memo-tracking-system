@@ -56,10 +56,8 @@ export async function POST(req) {
                     // UPLOAD FILE TO CLOUDINARY
                     try {
                         console.log("in the try block");
-                        const bytes = await image.arrayBuffer();
-                        const buffer = Buffer.from(bytes);
 
-                        url = await cloudinaryUpload(buffer);
+                        url = await cloudinaryUpload(image);
 
                         console.log("here is the url: ", url);
                     } catch (error) {
