@@ -55,6 +55,7 @@ export async function POST(req) {
                     let url;
                     // UPLOAD FILE TO CLOUDINARY
                     try {
+                        console.log("in the try block");
                         const bytes = await image.arrayBuffer()
                         const buffer = Buffer.from(bytes);
 
