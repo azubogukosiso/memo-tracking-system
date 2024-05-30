@@ -43,7 +43,7 @@ const ClientComponentBtn = ({ message, session }) => {
 
     const confirmReceipt = async (memoId) => {
         try {
-            const res = await fetch(`${LIVE_URL}api/Memos/confirmMemos`, {
+            const res = await fetch(`${process.env.LIVE_URL}api/Memos/confirmMemos`, {
                 method: "POST",
                 body: JSON.stringify({ memoId }),
                 "content-type": "application/json"
