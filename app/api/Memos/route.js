@@ -51,6 +51,7 @@ export async function POST(req) {
 
             await Promise.all(formDataEntryValues.map(async (image) => {
                 if (typeof image === "object") {
+                    console.log("it is an object");
                     let url;
                     // UPLOAD FILE TO CLOUDINARY
                     try {
@@ -61,7 +62,7 @@ export async function POST(req) {
 
                         console.log("here is the url: ", url);
                     } catch (error) {
-                        console.error(error);
+                        console.log("this is the error: ", error);
                         return NextResponse.json({ message: "Error", error }, { status: 500 });
                     }
 
