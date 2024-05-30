@@ -119,7 +119,7 @@ const Nav = () => {
                 </Link>
             </div>
 
-            <button className={`fixed ${isNavOpen ? 'hidden' : 'flex'} lg:hidden items-center justify-center right-[10px] bottom-[10px] bg-orange-500 rounded p-3 hover:bg-orange-600 text-white border border-black`} onClick={() => setIsNavOpen(!isNavOpen)}>
+            <button className={`fixed ${isNavOpen ? 'hidden' : 'flex'} lg:hidden items-center justify-center right-[10px] bottom-[10px] bg-orange-500 rounded z-20 p-3 hover:bg-orange-600 text-white border border-black`} onClick={() => setIsNavOpen(!isNavOpen)}>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="mr-1"><path d="M9.41421 8L18.0208 16.6066L16.6066 18.0208L8 9.41421V17H6V6H17V8H9.41421Z" /></svg>
                 Menu
             </button>
@@ -175,7 +175,7 @@ const Nav = () => {
                 </Link>
             </div>
 
-            <button className={`fixed ${isNavOpen ? 'hidden' : 'flex'} lg:hidden items-center justify-center right-[10px] bottom-[10px] bg-orange-500 rounded p-3 hover:bg-orange-600 text-white border border-black`} onClick={() => setIsNavOpen(!isNavOpen)}>
+            <button className={`fixed ${isNavOpen ? 'hidden' : 'flex'} lg:hidden items-center justify-center right-[10px] bottom-[10px] bg-orange-500 rounded z-20 p-3 hover:bg-orange-600 text-white border border-black`} onClick={() => setIsNavOpen(!isNavOpen)}>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="mr-1"><path d="M9.41421 8L18.0208 16.6066L16.6066 18.0208L8 9.41421V17H6V6H17V8H9.41421Z" /></svg>
                 Menu
             </button>
@@ -231,7 +231,7 @@ const Nav = () => {
                 </Link>
             </div>
 
-            <button className={`fixed ${isNavOpen ? 'hidden' : 'flex'} lg:hidden items-center justify-center right-[10px] bottom-[10px] bg-orange-500 rounded p-3 hover:bg-orange-600 text-white border border-black`} onClick={() => setIsNavOpen(!isNavOpen)}>
+            <button className={`fixed ${isNavOpen ? 'hidden' : 'flex'} lg:hidden items-center justify-center right-[10px] bottom-[10px] bg-orange-500 rounded z-20 p-3 hover:bg-orange-600 text-white border border-black`} onClick={() => setIsNavOpen(!isNavOpen)}>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="mr-1"><path d="M9.41421 8L18.0208 16.6066L16.6066 18.0208L8 9.41421V17H6V6H17V8H9.41421Z" /></svg>
                 Menu
             </button>
