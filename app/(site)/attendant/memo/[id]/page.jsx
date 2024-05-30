@@ -10,7 +10,7 @@ import ClientComponentBtn from '@/app/(components)/ClientComponentBtn';
 const fetchMemoDetails = async (id) => {
     console.log("this is the: ", id);
     try {
-        const res = await fetch(`http://localhost:3000/api/Memos/getMemos?id=${id}`);
+        const res = await fetch(`${LIVE_URL}api/Memos/getMemos?id=${id}`);
         return res.json();
     } catch (error) {
         console.log("Failed to get memo details", error)

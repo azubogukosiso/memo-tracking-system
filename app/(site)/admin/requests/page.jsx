@@ -7,7 +7,7 @@ import RequestCard from "@/app/(components)/RequestCard";
 
 const getRequests = async (session) => {
     try {
-        const res = await fetch("http://localhost:3000/api/Requests/getRequests", {
+        const res = await fetch(`${LIVE_URL}api/Requests/getRequests`, {
             method: "POST",
             body: JSON.stringify(session),
             "content-type": "application/json"
