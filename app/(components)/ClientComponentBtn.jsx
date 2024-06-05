@@ -73,7 +73,9 @@ const ClientComponentBtn = ({ message, session }) => {
 
         const formDataToSend = new FormData();
 
+        let memoType;
         if (formData.sender === session.user.office) { // SKIP CONFIRMATION HERE - CURRENT SENDER IS SAME AS ORIGINAL SENDER, HENCE A 'RESEND'
+            memoType = "Resent";
             formData.resent = true;
             formData.type = "resend";
 
@@ -91,7 +93,8 @@ const ClientComponentBtn = ({ message, session }) => {
                     formDataToSend.append(image.name, image);
                 })
             }
-        } else { // DO CONFIRMATION HERE - CURRENT SENDER IS NOT SAME AS ORIGINAL SENDER, HENCE A 'FORWARD' 
+        } else { // DO CONFIRMATION HERE - CURRENT SENDER IS NOT SAME AS ORIGINAL SENDER, HENCE A 'FORWARD'
+            memoType = "Forward";
             await confirmReceipt(formData.id);
             formData.sender = session.user.office;
             formData.resent = true;
@@ -121,7 +124,7 @@ const ClientComponentBtn = ({ message, session }) => {
         const decRes = await res.json();
 
         if (res.ok) {
-            toast.success(decRes.message, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
+            toast.success(memoType, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setPreviewImg([]);
             setLoadingAction(false);
         } else {
@@ -189,7 +192,7 @@ const ClientComponentBtn = ({ message, session }) => {
                 </PDFDownloadLink>
 
                 {
-                    formData.sender !== session.user.office // sender of memo is not the same as logged in user 
+                    memoTransferHistory[0].sender !== session.user.office // SENDER OF MEMO IS NOT THE SAME AS LOGGED IN USER
                         ?
                         <button className="p-3 bg-orange-500 border border-black hover:bg-orange-600 text-white rounded active:scale-95 transition-all" onClick={() => {
                             setForwardMemoOpts(true);
