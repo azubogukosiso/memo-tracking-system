@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Nav from "@/app/(components)/Nav";
 import Header from "@/app/(components)/HeaderComponent";
 import RequestCard from "@/app/(components)/RequestCard";
+import RequestList from "@/app/(components)/RequestListComponent";
 
 const getRequests = async (session) => {
     try {
@@ -54,14 +55,9 @@ const page = async () => {
             <div className="w-full lg:w-[78%]">
                 <Header />
                 <div className="border border-black"></div>
-                <div className="p-4">
-                    {
-                        message.length > 0 ? message.map(request => (
-                            <RequestCard key={request._id} request_key={request._id} sender={request.sender} senderEmail={request.senderEmail} memoTrackingNum={request.memoTrackingNum} addInfo={request.addInfo} status={request.status} dateSent={formatTimestamp(request.dateSent)} session={session} />
-                        )) : (
-                            <h3>No requests made yet.</h3>
-                        )
-                    }
+                <div className="p-4 w-full">
+                    <h2 className='mb-5'>All Requests</h2>
+                    <RequestList session={session} />
                 </div>
             </div>
         </div>

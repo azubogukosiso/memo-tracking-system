@@ -55,3 +55,29 @@ export async function POST(req) {
         );
     }
 }
+
+export async function GET(req) {
+    try {
+        const id = req.nextUrl.searchParams.get("id"); // EXTRACT ID PARAMETER
+        const email = req.nextUrl.searchParams.get("email"); // EXTRACT EMAIL PARAMETER
+        const role = req.nextUrl.searchParams.get("role"); // EXTRACT ROLE PARAMETER    
+
+        let requestDetails;
+        if (role === "admin") {
+            requestDetails = await Request.findOne({ _id: id });
+
+        } else {
+            requestDetails = await Request.findOne({ _id: id, senderEmail: email });
+        }
+
+        if (requestDetails) return NextResponse.json(
+            { message: requestDetails },
+            { status: 200 }
+        );
+    } catch (err) {
+        return NextResponse.json(
+            { message: "Error", err },
+            { status: 400 }
+        );
+    }
+}

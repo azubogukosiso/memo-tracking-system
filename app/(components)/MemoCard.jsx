@@ -7,7 +7,7 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
 
     const linkToMemo = `/attendant/memo/${memo_key}`;
     const linkToMemoAdmin = `/admin/memo/${memo_key}`;
-    const linkToMemoRequestForm = `/staff/request?memoId=${memo_key}`;
+    const linkToMemoRequestForm = `/staff/request?transactionId=${memo_key}`;
 
     return (
         <div className='flex flex-col md:flex-row justify-between items-start md:items-center p-4 border border-black mb-4 rounded'>
@@ -86,7 +86,7 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
                                     Loading
                                 </span>
                             ) : (
-                                <Link href={session.user.role === 'admin' ? linkToMemoAdmin : linkToMemo} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Full Details</Link>
+                                <Link href={session.user.role === 'admin' ? linkToMemoAdmin : linkToMemo} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Full details</Link>
                             )}
                         </div>
                     )
@@ -102,7 +102,7 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
                                     Loading
                                 </span>
                             ) : (
-                                <Link href={linkToMemoRequestForm} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Request Full Details</Link>
+                                <Link href={linkToMemoRequestForm} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Request full details</Link>
                             )}
                         </div>
                     )

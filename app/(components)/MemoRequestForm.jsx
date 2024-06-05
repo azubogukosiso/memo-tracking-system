@@ -3,10 +3,10 @@
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-const MemoRequestForm = ({ sender, memoTrackingNum }) => {
+const MemoRequestForm = ({ sender, memoTrackingNum, senderEmail, transactionId }) => {
     const [loadingAction, setLoadingAction] = useState(false);
     const [formData, setFormData] = useState({
-        title: '', description: '', sender
+        details: '', sender, senderEmail, transactionId
     });
 
     const handleChange = (e) => {
@@ -34,13 +34,12 @@ const MemoRequestForm = ({ sender, memoTrackingNum }) => {
             toast.success(decRes.message, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setLoadingAction(false);
             setFormData({
-                title: '', description: '', sender
+                details: '', sender, senderEmail, transactionId
             });
         } else {
             toast.error('An error occured in sending the request. Check your internet connection and try again', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setLoadingAction(false);
         }
-
     }
 
     return (
@@ -51,13 +50,8 @@ const MemoRequestForm = ({ sender, memoTrackingNum }) => {
 
                 <div>
                     <div>
-                        <label htmlFor="title" className='font-bold'>Request Title:</label> <br />
-                        <input type="text" name="title" id="title" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' required={true} value={formData.title} onChange={handleChange} />
-                    </div>
-                    <div className='my-8'></div>
-                    <div>
-                        <label htmlFor="description" className='font-bold'>Description:</label> <br />
-                        <textarea rows="5" type="text" name="description" id="description" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' required={true} value={formData.description} onChange={handleChange} />
+                        <label htmlFor="details" className='font-bold'>Details (Optional):</label> <br />
+                        <textarea rows="5" type="text" name="details" id="details" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' value={formData.details} onChange={handleChange} />
                     </div>
                     <div className='my-8'></div>
                     <span>

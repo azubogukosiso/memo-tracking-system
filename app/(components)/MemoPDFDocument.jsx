@@ -1,8 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Font } from "@react-pdf/renderer";
 
 const MemoPDFDocument = ({ message }) => {
-    console.log("pdf message: ", message);
-
     const styles = StyleSheet.create({
         page: {
             flexDirection: "column",

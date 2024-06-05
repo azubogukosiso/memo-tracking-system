@@ -34,6 +34,7 @@ const RequestListComponent = ({ session }) => {
                 });
                 const requests = await res.json();
                 setRequestList(requests.message);
+                console.log(requests.message);
                 setIsLoading(false);
             } catch (error) {
                 console.log("Failed to get memos", error);
@@ -48,7 +49,7 @@ const RequestListComponent = ({ session }) => {
     if (requestList.length > 0) {
         requestListDisplay =
             requestList.map(request => (
-                <RequestCard key={request._id} request_key={request._id} sender={request.sender} senderEmail={request.senderEmail} memoTrackingNum={request.memoTrackingNum} title={request.title} description={request.description} status={request.status} dateSent={formatTimestamp(request.dateSent)} session={session} />
+                <RequestCard key={request._id} request_key={request._id} sender={request.sender} senderEmail={request.senderEmail} memoTrackingNum={request.memoTrackingNum} details={request.details} status={request.status} dateSent={formatTimestamp(request.dateSent)} session={session} />
             ))
     } else {
         requestListDisplay = <p>There are currently no requests</p>

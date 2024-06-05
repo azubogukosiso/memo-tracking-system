@@ -6,33 +6,31 @@ export async function POST(req) {
     try {
         const body = await req.json();
         const responseData = body.formData;
-        console.log(responseData);
 
-        if (!responseData.response) {
+        if (!responseData.radioResponse) {
             return NextResponse.json(
-                { message: "All fields are required" },
+                { message: "Select an option in the list" },
                 { status: 400 }
             );
         }
 
-        const request = await Request.findById({ _id: responseData.request_id });
-        console.log(request);
+        console.log("This is the responseData: ", responseData);
 
+        const { radioResponse, ...responseDataTrimmed } = responseData;
 
-        const updatedResponseData = {
-            ...responseData,
-            receipient: request.sender
-        }
+        console.log("This is it: ", responseDataTrimmed, radioResponse);
 
-        const response = await Response.create(updatedResponseData);
+        const response = await Response.create(responseDataTrimmed);
         console.log("created response here", response);
 
+        let updatedRequest;
         if (response) {
-            const updatedRequest = await Request.findByIdAndUpdate(responseData.request_id, { status: 'responded' });
-
-            console.log(updatedRequest);
-
-            return NextResponse.json({ message: "Response created" }, { status: 201 });
+            if (radioResponse === "grant-request") {
+                updatedRequest = await Request.findByIdAndUpdate(responseData.request_id, { status: 'responded' });
+            } else {
+                updatedRequest = await Request.findByIdAndUpdate(responseData.request_id, { status: 'request denied' });
+            }
+            return NextResponse.json({ message: "Your response has been sent" }, { status: 201 });
         }
 
     } catch (err) {

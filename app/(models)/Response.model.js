@@ -11,11 +11,12 @@ const responseSchema = new Schema(
         },
         response: String,
         receipient: String,
+        receipientEmail: String,
         dateSent: {
             type: Date,
             default: Date.now
         },
-        memoTN: String,
+        memoTrackingNum: String,
     },
     {
         timestamps: true,

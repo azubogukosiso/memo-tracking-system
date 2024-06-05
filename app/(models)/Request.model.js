@@ -5,9 +5,13 @@ mongoose.Promise = global.Promise;
 
 const requestSchema = new Schema(
     {
-        title: String,
-        description: String,
+        details: String,
         sender: String,
+        senderEmail: String,
+        transactionId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Transaction'
+        },
         dateSent: {
             type: Date,
             default: Date.now

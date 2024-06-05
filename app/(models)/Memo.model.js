@@ -11,6 +11,10 @@ const memoSchema = new Schema(
             type: Array,
             default: null
         },
+        staffViewList: {
+            type: Array,
+            default: null
+        },
         memoTrackingNum: String,
         resent: {
             type: Boolean,

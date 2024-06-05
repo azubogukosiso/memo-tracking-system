@@ -17,9 +17,9 @@ const fetchMemoDetails = async (id) => {
 
 const page = async ({ searchParams }) => {
     const session = await getServerSession(authOptions);
-    const { memoId } = searchParams;
+    const { transactionId } = searchParams;
 
-    const { message } = await fetchMemoDetails(memoId);
+    const { message } = await fetchMemoDetails(transactionId);
 
     if (!session) {
         redirect("/login/staff");
@@ -32,7 +32,7 @@ const page = async ({ searchParams }) => {
             </div>
             <div className="w-full lg:w-[78%]">
                 <Header />
-                <MemoRequestForm sender={session.user.office} memoTrackingNum={message.memoTrackingNum} />
+                <MemoRequestForm sender={session.user.office} senderEmail={session.user.email} memoTrackingNum={message.memoTrackingNum} transactionId={transactionId} />
             </div>
         </div>
     )
