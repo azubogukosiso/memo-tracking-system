@@ -73,8 +73,10 @@ const ClientComponentBtn = ({ message, session }) => {
 
         const formDataToSend = new FormData();
 
+        console.log("form data: ", formData.sender);
+
         let memoType;
-        if (formData.sender === session.user.office) { // SKIP CONFIRMATION HERE - CURRENT SENDER IS SAME AS ORIGINAL SENDER, HENCE A 'RESEND'
+        if (memoTransferHistory[0].sender === session.user.office) { // SKIP CONFIRMATION HERE - CURRENT SENDER IS SAME AS ORIGINAL SENDER, HENCE A 'RESEND'
             memoType = "Resent";
             formData.resent = true;
             formData.type = "resend";
@@ -94,8 +96,12 @@ const ClientComponentBtn = ({ message, session }) => {
                 })
             }
         } else { // DO CONFIRMATION HERE - CURRENT SENDER IS NOT SAME AS ORIGINAL SENDER, HENCE A 'FORWARD'
-            memoType = "Forward";
-            await confirmReceipt(formData.id);
+            memoType = "Forwarded";
+
+            if (!memoStatus && session.user.office !== formData.sender) {
+                await confirmReceipt(formData.id);
+            }
+
             formData.sender = session.user.office;
             formData.resent = true;
             formData.type = "forward";

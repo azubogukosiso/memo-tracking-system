@@ -38,3 +38,4 @@ next-env.d.ts
 /app/dept
 /app/(site)/login/[slug]
 /public/images
+/TODO.md

@@ -86,7 +86,7 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
                                     Loading
                                 </span>
                             ) : (
-                                <Link href={session.user.role === 'admin' ? linkToMemoAdmin : linkToMemo} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Full details</Link>
+                                <Link href={session.user.role === 'admin' ? linkToMemoAdmin : linkToMemo} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Full Details</Link>
                             )}
                         </div>
                     )
@@ -102,7 +102,7 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
                                     Loading
                                 </span>
                             ) : (
-                                <Link href={linkToMemoRequestForm} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Request full details</Link>
+                                <Link href={linkToMemoRequestForm} className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Request Full Details</Link>
                             )}
                         </div>
                     )

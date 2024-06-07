@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import ClientComponentBtn from '@/app/(components)/ClientComponentBtn';
+import DeleteMemoComponent from '@/app/(components)/DeleteMemoComponent';
 
 const fetchMemoDetails = async (id) => {
     console.log("this is the: ", id);
@@ -96,7 +97,7 @@ const page = async ({ params }) => {
 
                     {
                         message.memoTransferHistory.map((transfer, index) => (
-                            <div key={index} className={`mb-3 p-3 rounded ${transfer._id === id ? 'bg-gray-300 border border-black' : ''}`}>
+                            <div key={index} className={`mb-3 p-3 rounded ${transfer.transactionId === id ? 'bg-gray-300 border border-black' : ''}`}>
                                 <p className='text-base'><span className='font-bold'>Sender:</span> {session.user.office === transfer.sender ? 'this office' : transfer.sender}</p>
 
                                 <p className='text-base'><span className='font-bold'>Receipient:</span> {session.user.office === transfer.receipient ? 'this office' : transfer.receipient}</p>
@@ -107,7 +108,10 @@ const page = async ({ params }) => {
                             </div>
                         ))
                     }
+
+                    <DeleteMemoComponent id={id} />
                 </div>
+
             </div>
         </div>
     )

@@ -1,14 +1,13 @@
 import Memo from "@/app/(models)/Memo.model";
 import Transaction from '@/app/(models)/Transaction.model';
+import Transaction_Backup from "@/app/(models)/TransactionBackup.model";
 import { NextResponse } from "next/server";
-import fs from 'fs/promises';
-import path from 'path';
 import { generateMemoTN } from "@/app/(functions)/generateMemoTN.js";
 import { cloudinaryUpload } from "@/app/(functions)/cloudinaryUpload.js";
 
 export async function POST(req) {
     try {
-        const data = await req.formData();
+        const data = await req.formData();  // EXTRACT ALL SUBMITTED MEMO DETAILS
 
         const title = data.get('title');
         const description = data.get('description');
@@ -20,17 +19,11 @@ export async function POST(req) {
 
         const formDataEntryValues = Array.from(data.values());
 
-        console.log("the form data is here: ", formDataEntryValues);
-
-        console.log("this is it: ", resent);
-
         const memoData = {
             title,
             description,
             image: [],
         }
-
-        console.log("before we start: ", memoData);
 
         if (!resent) {
             // CHECK FOR ALL REQUIRED FIELDS
@@ -49,19 +42,14 @@ export async function POST(req) {
                 );
             }
 
+            // LOOP THROUGH ARRAY OF IMAGES AND SEND EACH IMAGE TO CLOUDINARY
             await Promise.all(formDataEntryValues.map(async (image) => {
                 if (typeof image === "object") {
-                    console.log("it is an object");
                     let url;
                     // UPLOAD FILE TO CLOUDINARY
                     try {
-                        console.log("in the try block");
-
                         url = await cloudinaryUpload(image);
-
-                        console.log("here is the url: ", url);
                     } catch (error) {
-                        console.log("this is the error: ", error);
                         return NextResponse.json({ message: "Error", error }, { status: 500 });
                     }
 
@@ -69,21 +57,18 @@ export async function POST(req) {
                 }
             }));
 
-            console.log("right here -> ", memoData);
-
+            // GENERATE MEMO TRACKING NUMBER (MTN)
             const memoTrackingNum = generateMemoTN();
-            console.log("number here: ", memoTrackingNum);
-
             const memoDataUpdated = {
                 ...memoData,
                 memoTrackingNum,
-            }
+            } // UPDATE MEMO DETAILS WITH MTN
 
-            console.log(memoDataUpdated);
 
+            // CREATE MEMO IN MEMO COLLECTION WITH MEMO DETAILS
             const createdMainMemo = await Memo.create(memoDataUpdated);
-            console.log("The real memo: ", createdMainMemo);
 
+            // CREATE TRANSACTION DOCUMENT WITH MEMO DETAILS
             if (createdMainMemo) {
                 const memoTransferDetails = {
                     sender,
@@ -92,14 +77,13 @@ export async function POST(req) {
                     dateSent: Date.now(),
                 };
 
-                const savedMemoTransferDetails = await Transaction.create(memoTransferDetails);
+                const savedMemoTransferDetails = await Transaction.create(memoTransferDetails); // CREATE NEW TRANSACTION
+                const savedBackUpMemoTransferDetails = await Transaction_Backup.create({ ...memoTransferDetails, transactionId: savedMemoTransferDetails._id }); // CREATE NEW BACKUP TRANSACTION
 
-                console.log(savedMemoTransferDetails);
-
-                if (savedMemoTransferDetails) return NextResponse.json({ message: "Your memo has been sent" }, { status: 201 });
+                if (savedMemoTransferDetails && savedBackUpMemoTransferDetails) return NextResponse.json({ message: "Your memo has been sent" }, { status: 201 });
             }
         }
-        else {
+        else {  // IF MEMO IS RESENT OR FORWARDED
             if (sender === receipient) {
                 return NextResponse.json(
                     { message: "Sender cannot be the same as receipient" },
@@ -109,17 +93,11 @@ export async function POST(req) {
 
             await Promise.all(formDataEntryValues.map(async (image) => {
                 if (typeof image === "object") {
-                    console.log("it is an object");
                     let url;
                     // UPLOAD FILE TO CLOUDINARY
                     try {
-                        console.log("in the try block");
-
                         url = await cloudinaryUpload(image);
-
-                        console.log("here is the url: ", url);
                     } catch (error) {
-                        console.log("this is the error: ", error);
                         return NextResponse.json({ message: "Error", error }, { status: 500 });
                     }
 
@@ -127,24 +105,29 @@ export async function POST(req) {
                 }
             }));
 
-            console.log("the transaction id: ", id);
-
+            // SEARCH FOR TRANSACTION IN TRANSACTIONS COLLECTION
             const transDoc = await Transaction.findById(id);
 
-            if (transDoc) {
-                console.log("transDoc: ", transDoc);
-                const memoDoc = await Memo.findOneAndUpdate({ memoTrackingNum: transDoc.memoTrackingNum }, { resent: resent, $push: { image: { $each: memoData.image } } });
-                console.log("memoDoc: ", memoDoc);
+            if (transDoc) { // IF TRANSACTION EXISTS
+                await Memo.findOneAndUpdate({ memoTrackingNum: transDoc.memoTrackingNum }, { resent: resent, $push: { image: { $each: memoData.image } } }); // UPDATE MEMO IMAGES
 
                 const resentDoc = { sender, receipient, memoTrackingNum: transDoc.memoTrackingNum, type }
 
-                const resentMemo = await Transaction.create(resentDoc);
+                const resentMemo = await Transaction.create(resentDoc); // CREATE NEW TRANSACTION
+                const backupResentMemo = await Transaction_Backup.create({ ...resentDoc, transactionId: resentMemo._id }); // CREATE NEW BACKUP TRANSACTION
 
-                if (resentMemo) return NextResponse.json({ message: "Resent" }, { status: 201 });
+                if (resentMemo && backupResentMemo) return NextResponse.json({ message: "Resent" }, { status: 201 });
             }// else... HANDLE NOT FOUND LATER
         }
     } catch (err) {
-        console.log(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
+}
+
+export async function DELETE(req) {
+    const body = await req.json();
+
+    const deletedMemo = await Transaction.findByIdAndDelete(body);
+
+    if (deletedMemo) return NextResponse.json({ message: "Memo has been deleted" }, { status: 201 });
 }

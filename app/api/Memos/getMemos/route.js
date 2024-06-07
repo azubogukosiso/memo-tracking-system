@@ -1,5 +1,6 @@
 import Memo from "@/app/(models)/Memo.model";
 import Transaction from "@/app/(models)/Transaction.model";
+import Transaction_Backup from "@/app/(models)/TransactionBackup.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -111,7 +112,7 @@ export async function GET(req) {
         if (matchedTransaction) {
             const matchedMemo = await Memo.find({ memoTrackingNum: matchedTransaction.memoTrackingNum })
 
-            const memoTransferHistory = await Transaction.find({ memoTrackingNum: matchedTransaction.memoTrackingNum })
+            const memoTransferHistory = await Transaction_Backup.find({ memoTrackingNum: matchedTransaction.memoTrackingNum })
 
             // SORT TRANSACTIONS FROM LATEST TO OLDEST
             memoTransferHistory.sort(function (a, b) {

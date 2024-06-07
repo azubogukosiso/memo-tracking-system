@@ -74,6 +74,9 @@ const CreateMemoForm = ({ sender }) => {
                 setPreviewImg([]);
                 toast.success('Your memo has been sent', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
                 setLoadingAction(false);
+            } else {
+                toast.error(decRes.message, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
+                setLoadingAction(false);
             }
         } catch (error) {
             toast.error('An error occured in sending the memo. Check your internet connection and try again', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
