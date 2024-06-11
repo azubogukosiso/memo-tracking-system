@@ -10,7 +10,7 @@ export async function POST(req) {
 
         const transDoc = await Transaction.findByIdAndUpdate(body.memoId, { dateConfirmed: Date.now() });
         if (transDoc) {
-            const backupTransDoc = await Transaction_Backup.findByIdAndUpdate(transDoc.transactionId, { dateConfirmed: Date.now() });
+            const backupTransDoc = await Transaction_Backup.findOneAndUpdate({ transactionId: transDoc._id }, { dateConfirmed: Date.now() });
 
             if (backupTransDoc) return NextResponse.json({ message: "Confirmed" }, { status: 201 });
         }
