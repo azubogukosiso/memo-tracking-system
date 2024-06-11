@@ -1,4 +1,5 @@
 import Transaction from "@/app/(models)/Transaction.model";
+import Transaction_Backup from "@/app/(models)/TransactionBackup.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -8,9 +9,11 @@ export async function POST(req) {
         console.log("look: ", body.memoId);
 
         const transDoc = await Transaction.findByIdAndUpdate(body.memoId, { dateConfirmed: Date.now() });
-        console.log("over here: ", transDoc);
+        if (transDoc) {
+            const backupTransDoc = await Transaction_Backup.findByIdAndUpdate(transDoc._id, { dateConfirmed: Date.now() });
 
-        if (transDoc) return NextResponse.json({ message: "Confirmed" }, { status: 201 });
+            if (backupTransDoc) return NextResponse.json({ message: "Confirmed" }, { status: 201 });
+        }
     } catch (err) {
         console.log("Error here: ", err);
         return NextResponse.json(
