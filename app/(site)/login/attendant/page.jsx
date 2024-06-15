@@ -18,8 +18,8 @@ const Page = () => {
         if (res?.error) {
             toast.error(res.error, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setLoadingAction(false);
-        } else {
-            window.location.href = "/attendant";
+        } else if (res?.ok) {
+            router.push('/attendant');
         }
     }
 
