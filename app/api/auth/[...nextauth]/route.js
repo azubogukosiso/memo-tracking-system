@@ -19,7 +19,6 @@ export const authOptions = {
                     throw new Error("Please fill all the fields!");
                 }
 
-
                 const user = await User.findOne({ email: credentials.email, role: credentials.role });
                 if (!user) {
                     throw new Error('No user found!');
@@ -49,8 +48,6 @@ export const authOptions = {
         },
 
         async session({ session, token, user }) {
-            // console.log("\n\nsession callback", { session, token, user });
-
             // PASS USER'S ROLE AND OFFICE TO TOKEN AND THEN TO SESSION
             return {
                 ...session,

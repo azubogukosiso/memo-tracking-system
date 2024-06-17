@@ -99,7 +99,8 @@ const CreateMemoForm = ({ sender }) => {
                     <div className='my-8'></div>
                     <div>
                         <label htmlFor="description" className='font-bold'>Memo Description:</label> <br />
-                        <input type="text" name="description" id="description" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' required={true} value={formData.description} onChange={handleInputChange} />
+                        {/* <input type="text" name="description" id="description" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' required={true} value={formData.description} onChange={handleInputChange} /> */}
+                        <textarea rows="5" type="text" name="description" id="description" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' value={formData.description} onChange={handleInputChange} />
                     </div>
                     <div className='my-8'></div>
                     <div>
