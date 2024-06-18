@@ -165,9 +165,9 @@ export default async function Home() {
       </div>
 
       <div className='mb-5 md:mb-0 mt-14 flex justify-end items-center'>
-        <Link href='#' className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">User Guide</Link>
+        <Link href='/guide' className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">User Guide</Link>
         <span className="mx-3"></span>
-        <Link href='#' className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Feedback</Link>
+        <Link href='mailto:azuboguko@gmail.com' target="_blank" className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Feedback</Link>
       </div>
     </>
   )
