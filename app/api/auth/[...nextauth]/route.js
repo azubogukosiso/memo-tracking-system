@@ -33,8 +33,8 @@ export const authOptions = {
         }),
     ],
     callbacks: {
-        async jwt({ token, user, session }) {
-            // PASS USER'S ROLE AND OFFICE TO TOKEN OBJECT
+        async jwt({ token, user }) {
+            // PASS USER'S ROLE, OFFICE AND ID TO TOKEN OBJECT            
             if (user) {
                 return {
                     ...token,
@@ -47,8 +47,8 @@ export const authOptions = {
             return token;
         },
 
-        async session({ session, token, user }) {
-            // PASS USER'S ROLE AND OFFICE TO TOKEN AND THEN TO SESSION
+        async session({ session, token }) {
+            // TAKE TOKEN'S ROLE, OFFICE AND ID (PASSED FROM USER OBJECT ABOVE) TO SESSION        
             return {
                 ...session,
                 user: {
