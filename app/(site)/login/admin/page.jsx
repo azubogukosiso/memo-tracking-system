@@ -26,6 +26,7 @@ const Page = () => {
     return (
         <>
             <Header />
+            <div className="border border-black"></div>
             <form className='w-full md:w-1/2 mx-auto mt-32' onSubmit={logInAdmin}>
                 <div className='mx-5'>
                     <h1 className='mb-10'>Sign In - Admin</h1>

@@ -70,7 +70,6 @@ const CreateUserForm = () => {
                         <label htmlFor="role" className='font-bold'>Role:</label> <br />
                         <select name='role' onChange={handleChange} className="mb-3 bg-slate-300 border border-black p-2 rounded" value={formData.role}>
                             <option value="admin">Admin</option>
-                            <option value="staff">Staff</option>
                             <option value="attendant">Attendant</option>
                         </select>
                     </div>

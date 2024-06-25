@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import MemoCard from "@/app/(components)/MemoCard";
+import toast from "react-hot-toast";
 
 const formatTimestamp = (timestamp) => {
     if (timestamp === null) return timestamp;
@@ -21,8 +22,10 @@ const formatTimestamp = (timestamp) => {
 const SearchBar = ({ session }) => {
     const [memoResults, setMemoResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [searchInput, setSearchInput] = useState('');
 
     const fetchMemo = async (value) => {
+        setIsLoading(true);
         try {
             const res = await fetch("/api/Memos/getMemos", {
                 method: "POST",
@@ -30,7 +33,6 @@ const SearchBar = ({ session }) => {
                 "content-type": "application/json"
             })
             const decRes = await res.json();
-            console.log(decRes);
 
             const results = decRes.message.filter(memo => {
                 if (value && memo.memoTrackingNum.startsWith(value)) {
@@ -38,11 +40,32 @@ const SearchBar = ({ session }) => {
                 }
             })
 
-            console.log("way to go: ", results);
             setMemoResults(results);
             setIsLoading(false);
         } catch (error) {
-            console.log("Failed to get memos", error);
+            toast.error('An error occured in sending the memo. Check your internet connection and try again', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
+        }
+    }
+
+    const fetchSingleMemo = async (value) => {
+        setIsLoading(true);
+        try {
+            const res = await fetch("/api/Memos/getMemos", {
+                method: "POST",
+                body: JSON.stringify({ value }),
+                "content-type": "application/json"
+            })
+            const decRes = await res.json();
+
+            if (!res.ok) {
+                toast.error(decRes.message, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
+                setIsLoading(false);
+            } else {
+                setMemoResults(decRes.message);
+                setIsLoading(false);
+            }
+        } catch (error) {
+            toast.error('An error occured in sending the memo. Check your internet connection and try again', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
         }
     }
 
@@ -52,10 +75,14 @@ const SearchBar = ({ session }) => {
                 <h2 className='mb-5'>Memo Search</h2>
                 <>
                     <label className="font-bold">Type in the memo tracking number here: </label> <br />
-                    <input type="text" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2' onChange={(e) => {
-                        setIsLoading(true);
-                        fetchMemo(e.target.value);
+                    <input type="text" className='border border-black w-full focus:!outline-none bg-slate-300 rounded p-2 mb-3' onChange={(e) => {
+                        setSearchInput(e.target.value);
+                        session !== null && fetchMemo(e.target.value);
                     }} />
+                    {!session && <button className="p-3 bg-orange-500 border border-black hover:bg-orange-600 text-white rounded active:scale-95 transition-all" onClick={(e) => {
+                        searchInput === "" && setSearchInput(e.target.value);
+                        fetchSingleMemo(searchInput);
+                    }}>Search for memo</button>}
                 </>
 
                 <div className="mt-5">

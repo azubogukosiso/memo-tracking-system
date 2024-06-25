@@ -7,7 +7,9 @@ export async function POST(req) {
     try {
         const body = await req.json();
 
-        if (body.user.role !== 'admin') {
+        console.log("this is the body: ", body);
+
+        if (body.user?.role === 'attendant') {
             const Memos = [];
 
             const matchedTransactions = await Transaction.find({
@@ -52,7 +54,7 @@ export async function POST(req) {
                 { message: Memos },
                 { status: 200 }
             );
-        } else {
+        } else if (body.user?.role === 'admin') {
             const Memos = [];
 
             const matchedTransactions = await Transaction.find();
@@ -90,9 +92,43 @@ export async function POST(req) {
                 { message: Memos },
                 { status: 200 }
             );
+        } else {
+            const Memos = [];
+
+            console.log("this is the mtn: ", body);
+
+            const matchedTransaction = await Transaction.findOne({ memoTrackingNum: body.value, type: "original" });
+            const matchedMemo = await Memo.findOne({ memoTrackingNum: body.value });
+
+            console.log("the search is over: ", matchedTransaction, matchedMemo);
+
+            if (!matchedTransaction || !matchedMemo) {
+                return NextResponse.json(
+                    { message: "There is no memo with this tracking number!" },
+                    { status: 400 }
+                );
+            }
+
+            const memoDetails = {
+                id: matchedTransaction._id,
+                title: matchedMemo.title,
+                sender: matchedTransaction.sender,
+                receipient: matchedTransaction.receipient,
+                dateSent: matchedTransaction.dateSent,
+                dateConfirmed: matchedTransaction.dateConfirmed,
+                memoTrackingNum: matchedTransaction.memoTrackingNum,
+                type: matchedTransaction.type
+            }
+
+            Memos.push(memoDetails);
+
+            return NextResponse.json(
+                { message: Memos },
+                { status: 200 }
+            );
         }
     } catch (err) {
-
+        console.log("this is the error: ", err);
         return NextResponse.json(
             { message: "Error", err },
             { status: 400 }
@@ -139,6 +175,8 @@ export async function GET(req) {
                 type: matchedTransaction.type,
                 memoTransferHistory,
             }
+
+            console.log("right here: ", memoDetails);
 
             return NextResponse.json(
                 { message: memoDetails },

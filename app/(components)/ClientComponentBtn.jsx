@@ -40,10 +40,10 @@ const ClientComponentBtn = ({ message, session }) => {
     const [resendMemoOpts, setResendMemoOpts] = useState(false);
     const [forwardMemoOpts, setForwardMemoOpts] = useState(false);
     const [loadingAction, setLoadingAction] = useState(false);
+    const [loadingActionForward, setLoadingActionForward] = useState(false);
 
     const confirmReceipt = async (memoId) => {
-        console.log("this is the id: ", memoId);
-
+        setLoadingAction(true);
         try {
             const res = await fetch("/api/Memos/confirmMemos", {
                 method: "POST",
@@ -71,9 +71,9 @@ const ClientComponentBtn = ({ message, session }) => {
     const forwardMemo = async (e) => {
         e.preventDefault();
 
-        const formDataToSend = new FormData();
+        setLoadingActionForward(true)
 
-        console.log("form data: ", formData.sender);
+        const formDataToSend = new FormData();
 
         let memoType;
         if (memoTransferHistory[0].sender === session.user.office) { // SKIP CONFIRMATION HERE - CURRENT SENDER IS SAME AS ORIGINAL SENDER, HENCE A 'RESEND'
@@ -132,10 +132,10 @@ const ClientComponentBtn = ({ message, session }) => {
         if (res.ok) {
             toast.success(memoType, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setPreviewImg([]);
-            setLoadingAction(false);
+            setLoadingActionForward(false);
         } else {
             toast.error(decRes.message, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
-            setLoadingAction(false);
+            setLoadingActionForward(false);
         }
     }
 
@@ -172,7 +172,6 @@ const ClientComponentBtn = ({ message, session }) => {
                             </p>
                             : <button className="p-3 bg-orange-500 border border-black hover:bg-orange-600 text-white rounded active:scale-95 transition-all" onClick={() => {
                                 confirmReceipt(formData.id);
-                                setLoadingAction(true);
                             }} >
                                 {loadingAction ?
                                     (
@@ -248,8 +247,8 @@ const ClientComponentBtn = ({ message, session }) => {
                             </div>
                         </div>
                         <div className="my-6"></div>
-                        <button type="submit" className='bg-orange-500 border border-black text-white p-3 rounded cursor-pointer active:scale-95 transition-all' onClick={() => { setLoadingAction(true) }}>
-                            {loadingAction ?
+                        <button type="submit" className='bg-orange-500 border border-black text-white p-3 rounded cursor-pointer active:scale-95 transition-all'>
+                            {loadingActionForward ?
                                 (
                                     <span className='flex items-center text-center justify-center'>
                                         <svg aria-hidden="true" className="w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -299,8 +298,8 @@ const ClientComponentBtn = ({ message, session }) => {
                             </div>
                         </div>
                         <div className="my-6"></div>
-                        <button type="submit" className='bg-orange-500 border border-black text-white p-3 rounded cursor-pointer active:scale-95 transition-all' onClick={() => { setLoadingAction(true) }}>
-                            {loadingAction ?
+                        <button type="submit" className='bg-orange-500 border border-black text-white p-3 rounded cursor-pointer active:scale-95 transition-all'>
+                            {loadingActionForward ?
                                 (
                                     <span className='flex items-center text-center justify-center'>
                                         <svg aria-hidden="true" className="w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

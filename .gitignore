@@ -36,6 +36,6 @@ next-env.d.ts
 
 #others
 /app/dept
-/app/(site)/login/[slug]
+/app/(site)/admin/accounts
 /public/images
 /TODO.md
