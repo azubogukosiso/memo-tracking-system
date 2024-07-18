@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useLayoutEffect, Suspense } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from "next/link";
 import toast from 'react-hot-toast';
@@ -52,7 +52,7 @@ const Page = () => {
     }
 
     return (
-        <Suspense>
+        <>
             <Header />
             <div className="border border-black"></div>
             <form className='w-full md:w-1/2 mx-auto mt-32' onSubmit={logInAdmin}>
@@ -116,7 +116,7 @@ const Page = () => {
                 <span className="mx-3"></span>
                 <Link href='mailto:azuboguko@gmail.com' target="_blank" className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Feedback</Link>
             </div>
-        </Suspense>
+        </>
     )
 }
 
