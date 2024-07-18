@@ -11,6 +11,7 @@ const CreateMemoForm = ({ sender }) => {
     });
     const [previewImg, setPreviewImg] = useState([]);
     const [loadingAction, setLoadingAction] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
 
     const inputRef = useRef();
 
@@ -43,7 +44,8 @@ const CreateMemoForm = ({ sender }) => {
     const registerMemo = async (e) => {
         e.preventDefault();
 
-        console.log("here we are: ", formData);
+        setLoadingAction(true);
+        setIsDisabled(true);
 
         const formDataToSend = new FormData();
         formDataToSend.append('title', formData.title);
@@ -74,13 +76,16 @@ const CreateMemoForm = ({ sender }) => {
                 setPreviewImg([]);
                 toast.success('Your memo has been sent', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
                 setLoadingAction(false);
+                setIsDisabled(false);
             } else {
                 toast.error(decRes.message, { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
                 setLoadingAction(false);
+                setIsDisabled(false);
             }
         } catch (error) {
             toast.error('An error occured in sending the memo. Check your internet connection and try again', { duration: 4000, style: { background: '#f97316', color: '#fff', border: '1px solid #000', padding: '20px' } });
             setLoadingAction(false);
+            setIsDisabled(false);
         }
     }
 
@@ -136,7 +141,7 @@ const CreateMemoForm = ({ sender }) => {
                     </div>
                     <div className='my-6'></div>
 
-                    <button type="submit" className='bg-orange-500 border border-black text-white w-full p-3 rounded cursor-pointer active:scale-95 transition-all' onClick={() => { setLoadingAction(true) }}>
+                    <button disabled={isDisabled} type="submit" className={`bg-orange-500 border border-black text-white w-full p-3 rounded  active:scale-95 transition-all ${isDisabled && 'opacity-75 cursor-not-allowed'}`}>
                         {loadingAction ?
                             (
                                 <span className='flex items-center text-center justify-center'>

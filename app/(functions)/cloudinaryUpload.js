@@ -1,8 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-export const cloudinaryUpload = async (image) => {
-    console.log("this is the image: ", image);
-
+export const cloudinaryUpload = async (image, folderName) => {
     let fileBuffer = await image.arrayBuffer();
     let mime = image.type;
     let encoding = 'base64';
@@ -21,6 +19,7 @@ export const cloudinaryUpload = async (image) => {
                 overwrite: true,
                 invalidate: true,
                 resource_type: "auto",
+                folder: folderName
             },
             (error, result) => {
                 if (result) {

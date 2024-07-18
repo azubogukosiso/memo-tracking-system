@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import ClientComponentBtn from '@/app/(components)/ClientComponentBtn';
-import DeleteMemoComponent from '@/app/(components)/DeleteMemoComponent';
+// import DeleteMemoComponent from '@/app/(components)/DeleteMemoComponent';
 
 const fetchMemoDetails = async (id) => {
     console.log("this is the: ", id);
@@ -109,7 +109,7 @@ const page = async ({ params }) => {
                         ))
                     }
 
-                    <DeleteMemoComponent id={id} />
+                    {/* <DeleteMemoComponent id={id} /> */}
                 </div>
 
             </div>

@@ -5,11 +5,21 @@ mongoose.Promise = global.Promise;
 
 const userSchema = new Schema(
     {
-        username: String,
+        fullname: String,
         email: String,
-        password: String,
+        picture: String,
+        password: {
+            type: String,
+            default: null
+        },
         role: String,
-        office: String
+        office: String,
+        staffID: String,
+        isApproved: {
+            type: Boolean,
+            default: false
+        },
+        isCreatorAdmin: Boolean
     },
     {
         timestamps: true,

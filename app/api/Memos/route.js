@@ -48,7 +48,7 @@ export async function POST(req) {
                     let url;
                     // UPLOAD FILE TO CLOUDINARY
                     try {
-                        url = await cloudinaryUpload(image);
+                        url = await cloudinaryUpload(image, "memo_images");
                     } catch (error) {
                         return NextResponse.json({ message: "Error", error }, { status: 500 });
                     }

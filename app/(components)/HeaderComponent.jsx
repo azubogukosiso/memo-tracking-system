@@ -1,6 +1,7 @@
 'use client';
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { capitalizeFirstLetter } from "@/app/(functions)/capitalizeFirstLetter";
 
 const HeaderComponent = () => {
     const { data: session } = useSession();
@@ -11,7 +12,7 @@ const HeaderComponent = () => {
 
             {
                 session ?
-                    <p><span className='font-bold'>User ({session.user.role}):</span> {session.user.email} {session.user.role !== 'admin' && `- ${session.user.office}`}
+                    <p><span className='font-bold'>User ({capitalizeFirstLetter(session.user.role)}):</span> {session.user.email} {session.user.role !== 'admin' && `- ${session.user.office}`}
                     </p>
                     :
                     (

@@ -24,7 +24,8 @@ export default async function Home() {
             Ditch the paper trail! Our memo tracker app streamlines communication by efficiently managing incoming and outgoing memos, saving you time and ensuring nothing gets lost in the shuffle.
           </p>
           <Link href='/search' className="inline-block mt-2 py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Search for a Memo</Link> <br />
-          <Link href='/login/attendant' className="inline-block mt-2 py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Login as an Attendant</Link>
+          <Link href='/login/attendant' className="inline-block mt-2 py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Login as an Attendant</Link> <br />
+          <Link href='/submit-credentials' className="inline-block mt-2 py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Credentials submission</Link>
         </div>
         <div className="md:w-[30%] p-5">
           <svg width="332" height="331" viewBox="0 0 332 331" fill="none" className='w-full' xmlns="http://www.w3.org/2000/svg">
@@ -96,9 +97,9 @@ export default async function Home() {
       </div>
 
       <div className='pb-3 md:mb-0 mt-[75px] flex justify-end items-center'>
-        <Link href='/guide' className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">User Guide</Link>
+        {/* <Link href='/guide' className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">User Guide</Link> */}
         <span className="mx-3"></span>
-        <Link href='mailto:azuboguko@gmail.com' target="_blank" className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Feedback</Link>
+        <Link href='mailto:azuboguko@gmail.com' target="_blank" className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Drop Feedback</Link>
       </div>
     </>
   )

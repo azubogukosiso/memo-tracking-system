@@ -48,12 +48,20 @@ const MemoCard = ({ memo_key, sender, receipient, memoTrackingNum, title, sessio
                 <div className="my-2"></div>
                 {
                     session !== null ?
-                        session?.user.office !== sender ? (
-                            <p className="font-bold">From: {sender}</p>
-                        ) :
-                            (
-                                <p className="font-bold">To: {receipient}</p>
+                        session?.user.role === "admin"
+                            ? (
+                                <>
+                                    <p className="font-bold">From: {sender}</p>
+
+                                    <p className="font-bold">To: {receipient}</p>
+                                </>
                             )
+                            : session?.user.office !== sender ? (
+                                <p className="font-bold">From: {sender}</p>
+                            ) :
+                                (
+                                    <p className="font-bold">To: {receipient}</p>
+                                )
                         : <></>
                 }
 
