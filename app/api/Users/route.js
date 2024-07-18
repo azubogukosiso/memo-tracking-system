@@ -125,6 +125,7 @@ export async function PATCH(req) {
                 if (user) return NextResponse.json({ message: "User account has been approved" }, { status: 201 });
             }
         } catch (error) {
+            console.log("this is the error: ", error);
             return NextResponse.json({ message: "An error occured in approving the user. Check your internet connection and try again" }, { status: 500 });
         }
     } catch (err) {
