@@ -2,6 +2,7 @@ import AuthProvider from "@/app/(components)/AuthProvider";
 import ToasterContext from "./(components)/ToasterContext";
 import './globals.css';
 import { DM_Sans } from 'next/font/google';
+import { Suspense } from "react";
 
 const dm_sans = DM_Sans({ subsets: ['latin'] })
 
@@ -16,7 +17,9 @@ export default async function RootLayout({ children }) {
       <AuthProvider>
         <body className={`${dm_sans.className} max-h-screen h-screen p-3`}>
           <ToasterContext />
-          {children}
+          <Suspense>
+            {children}
+          </Suspense>
         </body>
       </AuthProvider>
     </html>
