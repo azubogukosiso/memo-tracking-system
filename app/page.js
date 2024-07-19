@@ -95,12 +95,6 @@ export default async function Home() {
           </svg>
         </div>
       </div>
-
-      <div className='pb-3 md:mb-0 mt-[75px] flex justify-end items-center'>
-        {/* <Link href='/guide' className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">User Guide</Link> */}
-        <span className="mx-3"></span>
-        <Link href='mailto:azuboguko@gmail.com' target="_blank" className="py-1 hover:bg-gray-200 border-black border-b-2 border-dashed cursor-pointer transition-all">Drop Feedback</Link>
-      </div>
     </>
   )
 }

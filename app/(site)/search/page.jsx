@@ -1,4 +1,6 @@
 import { getServerSession } from 'next-auth';
+import Link from "next/link";
+
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from "next/navigation";
 import Header from "@/app/(components)/HeaderComponent";
@@ -14,11 +16,11 @@ const page = async () => {
     }
 
     return (
-        <div>
+        <>
             <Header />
             <div className="border border-black"></div>
             <SearchBar session={session} />
-        </div>
+        </>
     )
 }
 
