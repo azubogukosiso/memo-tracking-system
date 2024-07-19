@@ -30,8 +30,8 @@
   p {
     @apply text-sm;
   }
-}
 
-* {
-  font-family: dm sans;
+  * {
+    letter-spacing: 0.03rem;
+  }
 }

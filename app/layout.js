@@ -1,11 +1,11 @@
 import AuthProvider from "@/app/(components)/AuthProvider";
 import ToasterContext from "./(components)/ToasterContext";
 import './globals.css';
-import { DM_Sans } from 'next/font/google';
+import { Questrial } from 'next/font/google';
 import { Suspense } from "react";
 import Link from "next/link";
 
-const dm_sans = DM_Sans({ subsets: ['latin'] })
+const dm_sans = Questrial({ subsets: ['latin'], display: "swap", weight: '400' });
 
 export const metadata = {
   title: 'Memo Tracker',
