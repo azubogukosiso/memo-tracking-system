@@ -5,7 +5,7 @@ import { Questrial } from 'next/font/google';
 import { Suspense } from "react";
 import Link from "next/link";
 
-const dm_sans = Questrial({ subsets: ['latin'], display: "swap", weight: '400' });
+const questrial = Questrial({ subsets: ['latin'], display: "swap", weight: '400' });
 
 export const metadata = {
   title: 'Memo Tracker',
@@ -16,7 +16,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <AuthProvider>
-        <body className={`${dm_sans.className} max-h-screen h-screen p-3 min-h-screen flex flex-col`}>
+        <body className={`${questrial.className} max-h-screen h-screen p-3 min-h-screen flex flex-col`}>
           <ToasterContext />
           <Suspense>
             {children}
